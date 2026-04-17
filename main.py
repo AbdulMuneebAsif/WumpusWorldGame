@@ -19,10 +19,13 @@ class WumpusWorld:
         self.generate_world()
 
     def posgen(self):
+        forbidden = [[0, 0], [1, 0], [0, 1]]
+
         while True:
             r1 = random.randint(0, self.size - 1)
             r2 = random.randint(0, self.size - 1)
-            if not (r1 == 0 and r2 == 0):
+
+            if [r1, r2] not in forbidden:
                 return [r1, r2]
 
     def generate_world(self):
@@ -134,12 +137,36 @@ class Game:
         for i in range(4):
             row = []
             for j in range(4):
+                cell = self.world.get_cell(i, j)
+
+                # CURRENT PLAYER POSITION
                 if i == self.player.x and j == self.player.y:
-                    row.append("A")
+                    visible = "A"
+
+                    if "S" in cell:
+                        visible += "S"
+                    if "B" in cell:
+                        visible += "B"
+
+                    row.append(visible)
+
+                # VISITED CELLS
                 elif self.visited[i][j]:
-                    row.append(".")
+                    visible = ""
+                    if "S" in cell:
+                        visible += "S"
+                    if "B" in cell:
+                        visible += "B"
+
+                    if visible == "":
+                        visible = "."
+
+                    row.append(visible)
+
+                # UNKNOWN
                 else:
                     row.append("?")
+
             print(row)
 
     def play(self):
@@ -152,8 +179,13 @@ class Game:
             self.display_map()
 
             self.show_percepts()
+            print("\nControls:")
+            print("W → Up")
+            print("S → Down")
+            print("A → Left")
+            print("D → Right")
 
-            move = input("Move (W/A/S/D): ").lower()
+            move = input("Your move: ").lower()
             self.player.move(move, 4)
 
             self.check_cell()
