@@ -170,7 +170,6 @@ This project is open-source and available under the MIT License.
 ## 👨‍💻 Author
 
 **Abdul Muneeb Asif**
-Roku Developer | Python Enthusiast | Final Year CS Student
 
 ---
 
